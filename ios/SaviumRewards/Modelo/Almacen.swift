@@ -60,7 +60,6 @@ final class Almacen {
 
     var visibles: [Tarjeta] { misTarjetas.filter { !$0.borrado } }
     var programasOrdenados: [Programa] { programas.values.filter(\.activo).sorted { $0.nombre.localizedStandardCompare($1.nombre) == .orderedAscending } }
-    var totales: [TotalUnidad] { Totales.porUnidad(visibles, programas: programas) }
     func programa(_ t: Tarjeta) -> Programa? { t.programaId.flatMap { programas[$0] } }
     func dueno(_ t: Tarjeta) -> String? { miembros.first { $0.userId == t.userId }?.nombre }
     func esMia(_ t: Tarjeta) -> Bool { t.userId == usuario }

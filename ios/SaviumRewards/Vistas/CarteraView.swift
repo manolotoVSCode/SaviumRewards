@@ -1,7 +1,7 @@
 import SwiftUI
 import RewardsCore
 
-/// Pantalla principal: totales por unidad, mis tarjetas y las compartidas de la familia.
+/// Pantalla principal: mis tarjetas y las compartidas de la familia.
 struct CarteraView: View {
     @Environment(Almacen.self) private var almacen
     @Namespace private var zoom
@@ -14,7 +14,6 @@ struct CarteraView: View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 14) {
-                    if busqueda.isEmpty, !almacen.totales.isEmpty { cabecera }
                     seccion("Mías", tarjetas: filtradas(almacen.visibles))
                     if !almacen.familia.isEmpty {
                         seccion("De la familia", tarjetas: filtradas(almacen.familia))
@@ -52,26 +51,6 @@ struct CarteraView: View {
             .sheet(isPresented: $ordenando) { OrdenarView() }
             .sheet(isPresented: $ajustes) { AjustesView() }
         }
-    }
-
-    private var cabecera: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(almacen.totales, id: \.self) { total in
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(Formato.saldo(total.total))
-                            .font(.system(.title2, design: .rounded).bold())
-                            .monospacedDigit()
-                            .contentTransition(.numericText(value: Double(total.total)))
-                        Text(total.unidad).font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 16).padding(.vertical, 12)
-                    .glassEffect(.regular, in: .rect(cornerRadius: 18, style: .continuous))
-                }
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Total de puntos")
     }
 
     @ViewBuilder

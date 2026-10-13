@@ -13,12 +13,11 @@ struct EntrarView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 22) {
-                Image(systemName: "wallet.pass.fill")
-                    .font(.system(size: 64, weight: .semibold))
-                    .foregroundStyle(.white)
+                Image("Logo")
+                    .resizable()
                     .frame(width: 120, height: 120)
-                    .background(LinearGradient(colors: [Color(hex: 0x34A815), Color(hex: 0x239005)], startPoint: .topLeading, endPoint: .bottomTrailing),
-                                in: .rect(cornerRadius: 30, style: .continuous))
+                    .clipShape(.rect(cornerRadius: 27, style: .continuous))
+                    .accessibilityHidden(true)
                     .padding(.top, 50)
                 VStack(spacing: 6) {
                     Text("Savium Rewards").font(.largeTitle.bold())
