@@ -3,6 +3,8 @@ import SwiftUI
 struct RaizView: View {
     @Environment(Sesion.self) private var sesion
     @Environment(Almacen.self) private var almacen
+    @Environment(Bloqueo.self) private var bloqueo
+    @Environment(\.scenePhase) private var fase
     @AppStorage("bienvenidaVista") private var bienvenidaVista = false
 
     var body: some View {
@@ -14,7 +16,9 @@ struct RaizView: View {
                 EntrarView()
             case .dentro(let usuario):
                 Group {
-                    if almacen.pertenencia == .sinFamilia {
+                    if bloqueo.bloqueado {
+                        BloqueoView()
+                    } else if almacen.pertenencia == .sinFamilia {
                         SinFamiliaView()
                     } else {
                         CarteraView()
@@ -23,7 +27,15 @@ struct RaizView: View {
                 .task(id: usuario) { await almacen.abrir(usuario: usuario) }
             }
         }
-        .fullScreenCover(isPresented: Binding(get: { !bienvenidaVista && sesion.usuario != nil }, set: { _ in })) {
+        .onChange(of: sesion.estado) { anterior, nuevo in
+            // Acaba de entrar con su correo: no se le pide además Face ID.
+            if anterior == .fuera, case .dentro = nuevo { bloqueo.recienAutenticado() }
+        }
+        .onChange(of: fase) { _, nueva in
+            if nueva == .background { bloqueo.enSegundoPlano() }
+            if nueva == .active { bloqueo.alVolver() }
+        }
+        .fullScreenCover(isPresented: Binding(get: { !bienvenidaVista && sesion.usuario != nil && !bloqueo.bloqueado }, set: { _ in })) {
             BienvenidaView()
         }
     }

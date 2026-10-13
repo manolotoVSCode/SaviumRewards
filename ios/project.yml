@@ -30,6 +30,7 @@ targets:
         INFOPLIST_KEY_CFBundleDisplayName: Savium Rewards
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.lifestyle
+        INFOPLIST_KEY_NSFaceIDUsageDescription: "Savium Rewards usa Face ID para proteger tus tarjetas."
         INFOPLIST_KEY_NSCameraUsageDescription: "Savium Rewards usa la cámara para leer el código de tus tarjetas."
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait

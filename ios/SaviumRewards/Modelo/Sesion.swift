@@ -38,20 +38,19 @@ final class Sesion {
         }
     }
 
-    /// Envía el código al correo. Devuelve false si no se pudo (con el motivo en `mensaje`).
+    /// Pide el código a la función `rewards-codigo`, que solo lo envía a miembros de una familia (solo por
+    /// invitación) y responde igual exista o no el correo. Devuelve false si no se pudo pedir.
     func pedirCodigo(email: String) async -> Bool {
         mensaje = nil
+        struct Cuerpo: Encodable { let email: String }
         do {
-            try await supabase.auth.signInWithOTP(email: Self.limpiar(email), shouldCreateUser: false)
+            try await supabase.functions.invoke("rewards-codigo", options: FunctionInvokeOptions(body: Cuerpo(email: Self.limpiar(email))))
             return true
         } catch {
-            let texto = String(describing: error).lowercased()
-            if texto.contains("signup") || texto.contains("not allowed") || texto.contains("otp_disabled") || texto.contains("not found") {
-                mensaje = String(localized: "Savium Rewards es solo por invitación. Pide a quien administra tu familia que te invite con este correo.")
-            } else if texto.contains("rate") || texto.contains("429") {
+            if case FunctionsError.httpError(let codigo, _) = error, codigo == 429 {
                 mensaje = String(localized: "Has pedido varios códigos seguidos. Espera un minuto y vuelve a intentarlo.")
             } else {
-                mensaje = String(localized: "No se pudo enviar el código. Revisa la conexión y el correo.")
+                mensaje = String(localized: "No se pudo pedir el código. Revisa la conexión y el correo.")
             }
             return false
         }

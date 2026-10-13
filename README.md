@@ -22,7 +22,7 @@ Plan: `docs/superpowers/plans/2026-10-13-savium-rewards-v1.md`.
 | `shared/fixtures/` | Casos de prueba de códigos (incluye barras de referencia generadas con JsBarcode). Finanzas tiene una copia en `shared/fixtures/rewards-codigos.json` para su `src/lib/rewards`: si cambian, actualizar las dos. |
 | `supabase/migrations/` | Esquema `rewards_*`, reglas de acceso y funciones. |
 | `supabase/tests/` | Pruebas de reglas de acceso (se ejecutan en una transacción que se deshace). |
-| `supabase/functions/` | `rewards-invitar` (invitaciones) y `rewards-cuenta` (eliminar cuenta, quitar miembro, roles, familias). |
+| `supabase/functions/` | `rewards-codigo` (envía el código de acceso solo a miembros), `rewards-invitar` (invitaciones) y `rewards-cuenta` (eliminar cuenta, quitar miembro, roles, familias). |
 | `supabase/semillas/` | Catálogo inicial (borrador por revisar) y arranque de la primera familia. |
 
 ## Comandos
@@ -36,8 +36,10 @@ xcrun simctl launch booted com.savium.rewards -demo YES   # (solo Debug) cartera
 
 ## Servidor
 
-- Cuentas de Supabase Auth con **correo + código de un solo uso**, sin contraseña. **Registro público
-  desactivado**: las cuentas las crea `rewards-invitar` (solo administradores).
+- Cuentas de Supabase Auth con **correo + código de un solo uso** (o contraseña, si la cuenta la tiene: el titular
+  y la cuenta de revisión de Apple). **Registro público desactivado** (comprobado: `signup_disabled`); las cuentas
+  las crea `rewards-invitar` (solo administradores) y el código solo lo envía `rewards-codigo` a miembros.
+- **Face ID** al abrir y al volver, como en Savium Finanzas (`Bloqueo`, regla en `RewardsCore`).
 - Reglas de acceso: cada uno ve sus tarjetas y las **compartidas** de su familia; solo el dueño edita. Las
   privadas no las ve nadie más, tampoco el administrador (que solo ve conteos en `rewards_uso()`).
 - Sin borrado físico desde el cliente: `borrado = true`. `sincronizado` lo pone un trigger y es el cursor de la app.

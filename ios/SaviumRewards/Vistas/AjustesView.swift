@@ -1,8 +1,10 @@
 import SwiftUI
+import RewardsCore
 
 struct AjustesView: View {
     @Environment(Almacen.self) private var almacen
     @Environment(Sesion.self) private var sesion
+    @Environment(Bloqueo.self) private var bloqueo
     @Environment(\.dismiss) private var cerrar
     @State private var nombre = ""
     @State private var confirmarSalida = false
@@ -21,6 +23,20 @@ struct AjustesView: View {
                         Text("México").tag("MX")
                         Text("España").tag("ES")
                     }
+                }
+
+                Section {
+                    Toggle("Pedir Face ID al abrir", isOn: Binding(get: { bloqueo.activo }, set: { bloqueo.cambiarActivo($0) }))
+                        .disabled(!bloqueo.disponible)
+                    if bloqueo.activo && bloqueo.disponible {
+                        Picker("Pedirlo al volver", selection: Binding(get: { bloqueo.plazo }, set: { bloqueo.cambiarPlazo($0) })) {
+                            ForEach(PlazoBloqueo.allCases) { Text($0.titulo).tag($0) }
+                        }
+                    }
+                } header: {
+                    Text("Seguridad")
+                } footer: {
+                    if !bloqueo.disponible { Text("Activa Face ID o el código en los Ajustes del iPhone para usarlo.") }
                 }
 
                 Section {

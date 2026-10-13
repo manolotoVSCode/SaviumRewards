@@ -4,6 +4,7 @@ import SwiftUI
 struct SaviumRewardsApp: App {
     @State private var sesion = Sesion()
     @State private var almacen = Almacen()
+    @State private var bloqueo = Bloqueo()
     @Environment(\.scenePhase) private var fase
 
     var body: some Scene {
@@ -11,6 +12,7 @@ struct SaviumRewardsApp: App {
             RaizView()
                 .environment(sesion)
                 .environment(almacen)
+                .environment(bloqueo)
                 .onChange(of: fase) { _, nueva in
                     if nueva == .active { Task { await almacen.sincronizar() } }
                 }

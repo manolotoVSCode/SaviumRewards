@@ -58,7 +58,8 @@ struct EntrarView: View {
                             .onChange(of: codigo) { _, nuevo in
                                 if nuevo.filter(\.isNumber).count >= 6 { Task { await verificar() } }
                             }
-                        Text("Te hemos enviado un código a \(email).").font(.footnote).foregroundStyle(.secondary)
+                        Text("Si \(email) está invitado a Savium Rewards, te llegará un código en unos segundos.")
+                            .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
                     }
 
                     if let mensaje = sesion.mensaje {
