@@ -1,0 +1,41 @@
+name: SaviumRewards
+options:
+  bundleIdPrefix: com.savium
+  deploymentTarget:
+    iOS: "27.0"
+  developmentLanguage: es
+packages:
+  Supabase:
+    url: https://github.com/supabase/supabase-swift
+    from: "2.29.0"
+  RewardsCore:
+    path: RewardsCore
+targets:
+  SaviumRewards:
+    type: application
+    platform: iOS
+    sources: [SaviumRewards]
+    dependencies:
+      - package: Supabase
+      - package: RewardsCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.savium.rewards
+        PRODUCT_NAME: SaviumRewards
+        DEVELOPMENT_TEAM: FY5F6RR37J
+        CODE_SIGN_STYLE: Automatic
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Savium Rewards
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.lifestyle
+        INFOPLIST_KEY_NSCameraUsageDescription: "Savium Rewards usa la cámara para leer el código de tus tarjetas."
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "6.0"
+        SWIFT_EMIT_LOC_STRINGS: YES
+        LOCALIZATION_PREFERS_STRING_CATALOGS: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor

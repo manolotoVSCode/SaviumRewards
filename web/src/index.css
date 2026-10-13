@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply bg-fondo text-black antialiased dark:bg-fondo-oscuro dark:text-white; }
+}
+
+@layer components {
+  .panel { @apply rounded-2xl bg-panel dark:bg-panel-oscuro; }
+  .campo { @apply w-full rounded-xl bg-black/5 px-3.5 py-2.5 outline-none ring-savium/50 focus:ring-2 dark:bg-white/10; }
+  .boton { @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 font-semibold transition active:scale-[0.98] disabled:opacity-40; }
+  .boton-principal { @apply boton bg-savium text-white hover:bg-savium-claro; }
+  .boton-secundario { @apply boton bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/15; }
+  .etiqueta { @apply mb-1 block text-xs font-medium text-black/50 dark:text-white/50; }
+}

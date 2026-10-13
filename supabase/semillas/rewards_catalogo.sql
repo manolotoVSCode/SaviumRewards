@@ -1,0 +1,55 @@
+-- Catálogo inicial de Rewards. BORRADOR: revisar con el usuario antes de ejecutarlo
+-- (nombres, colores aproximados de marca, unidades y tipo de código habitual).
+-- Idempotente: no duplica programas ya existentes (único por nombre y país).
+
+insert into public.rewards_programas (nombre, tipo, pais, color, unidad, codigo_tipo) values
+  -- México
+  ('Aeroméxico Rewards', 'aerolinea', 'MX', '#0B2343', 'puntos', 'ninguno'),
+  ('Viva Aerobus Viva Club', 'aerolinea', 'MX', '#00A650', 'puntos', 'ninguno'),
+  ('Volaris v.club', 'aerolinea', 'MX', '#A6007E', 'puntos', 'ninguno'),
+  ('BBVA Puntos', 'tarjeta_credito', 'MX', '#004481', 'puntos', 'ninguno'),
+  ('Banamex Puntos Premia', 'tarjeta_credito', 'MX', '#00266E', 'puntos', 'ninguno'),
+  ('Santander Puntos', 'tarjeta_credito', 'MX', '#EC0000', 'puntos', 'ninguno'),
+  ('Banorte Puntos', 'tarjeta_credito', 'MX', '#EB0029', 'puntos', 'ninguno'),
+  ('HSBC Puntos', 'tarjeta_credito', 'MX', '#DB0011', 'puntos', 'ninguno'),
+  ('American Express Membership Rewards', 'tarjeta_credito', 'MX', '#006FCF', 'puntos', 'ninguno'),
+  ('Soriana Recompensas', 'comercio', 'MX', '#D7182A', 'puntos', 'ean13'),
+  ('Liverpool Monedero', 'comercio', 'MX', '#E10098', 'pesos', 'code128'),
+  ('Sanborns', 'comercio', 'MX', '#1B3E8C', 'puntos', 'code128'),
+  ('Chedraui Monedero', 'comercio', 'MX', '#F37021', 'pesos', 'ean13'),
+  ('Spin Premia (OXXO)', 'comercio', 'MX', '#E30613', 'puntos', 'qr'),
+  ('Farmacias del Ahorro Monedero', 'comercio', 'MX', '#003DA5', 'pesos', 'code128'),
+  ('Costco México', 'comercio', 'MX', '#005DAA', 'membresía', 'code128'),
+  ('Club Cinépolis', 'comercio', 'MX', '#002F6C', 'puntos', 'qr'),
+  ('Starbucks Rewards', 'comercio', 'MX', '#00704A', 'estrellas', 'qr'),
+  ('PetroSeven', 'comercio', 'MX', '#E2001A', 'puntos', 'qr'),
+  ('Sam''s Club México', 'comercio', 'MX', '#0067A0', 'membresía', 'code128'),
+  -- España
+  ('Iberia Club', 'aerolinea', 'ES', '#D7192D', 'Avios', 'ninguno'),
+  ('Vueling Club', 'aerolinea', 'ES', '#FFCC00', 'Avios', 'ninguno'),
+  ('Air Europa SUMA', 'aerolinea', 'ES', '#0A2E5C', 'millas', 'ninguno'),
+  ('Travel Club', 'comercio', 'ES', '#E4002B', 'puntos', 'ean13'),
+  ('Carrefour Club', 'comercio', 'ES', '#004E9F', 'euros', 'ean13'),
+  ('El Corte Inglés', 'comercio', 'ES', '#00843D', 'euros', 'code128'),
+  ('Club DIA', 'comercio', 'ES', '#E30613', 'euros', 'ean13'),
+  ('Eroski Club', 'comercio', 'ES', '#E2001A', 'euros', 'ean13'),
+  ('Repsol Waylet', 'comercio', 'ES', '#FF8200', 'euros', 'qr'),
+  ('Moeve Gow', 'comercio', 'ES', '#00A19A', 'puntos', 'qr'),
+  ('Renfe Más', 'comercio', 'ES', '#8A1C7C', 'puntos', 'ninguno'),
+  ('BBVA Puntos España', 'tarjeta_credito', 'ES', '#004481', 'puntos', 'ninguno'),
+  ('Santander España', 'tarjeta_credito', 'ES', '#EC0000', 'puntos', 'ninguno'),
+  ('American Express Membership Rewards España', 'tarjeta_credito', 'ES', '#006FCF', 'puntos', 'ninguno'),
+  ('IKEA Family', 'comercio', 'ES', '#0058A3', 'socio', 'qr'),
+  ('Decathlon', 'comercio', 'ES', '#0082C3', 'puntos', 'ean13'),
+  -- Internacional
+  ('Marriott Bonvoy', 'hotel', 'INT', '#1C1C1C', 'puntos', 'ninguno'),
+  ('Hilton Honors', 'hotel', 'INT', '#104C97', 'puntos', 'ninguno'),
+  ('IHG One Rewards', 'hotel', 'INT', '#F26722', 'puntos', 'ninguno'),
+  ('World of Hyatt', 'hotel', 'INT', '#1A3A6B', 'puntos', 'ninguno'),
+  ('Accor ALL', 'hotel', 'INT', '#1E1852', 'puntos', 'ninguno'),
+  ('LifeMiles', 'aerolinea', 'INT', '#E4002B', 'millas', 'ninguno'),
+  ('Flying Blue', 'aerolinea', 'INT', '#0B2D6B', 'millas', 'ninguno'),
+  ('AAdvantage', 'aerolinea', 'INT', '#0078D2', 'millas', 'ninguno'),
+  ('United MileagePlus', 'aerolinea', 'INT', '#005DAA', 'millas', 'ninguno'),
+  ('Delta SkyMiles', 'aerolinea', 'INT', '#C01933', 'millas', 'ninguno')
+on conflict (nombre, pais) do nothing;

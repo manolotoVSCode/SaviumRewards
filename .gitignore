@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+dist/
+.env.local
+*.xcodeproj
+DerivedData/
+.build/
+.build/
+.swiftpm/
+ios/build/
+web/node_modules/
+web/dist/
+docs/auditorias/
