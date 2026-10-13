@@ -16,7 +16,7 @@ CUBO = [
     [(10.5, 48), (10.5, 136), (91.5, 175), (172.5, 136), (172.5, 48)],
     [(91.5, 106), (91.5, 175)],
 ]
-ARRIBA, ABAJO = -52, 185               # alto total del dibujo, en unidades del viewBox
+ARRIBA, ABAJO = -8, 185                # alto total del dibujo, en unidades del viewBox
 ESCALA = L * 0.64 / (ABAJO - ARRIBA)
 DX = (L - 184 * ESCALA) / 2
 DY = (L - (ABAJO - ARRIBA) * ESCALA) / 2 - ARRIBA * ESCALA
@@ -39,6 +39,11 @@ def lazo(nudo, lado):
     return pts
 
 
+def tapar(d, trazo_pts):
+    """Rellena de verde el interior de una lazada: tapa las aristas del cubo que quedan detrás."""
+    d.polygon([punto(p) for p in trazo_pts], fill=VERDE + (255,))
+
+
 def dibujar(d, trazo_pts, cerrar=False):
     pts = [punto(p) for p in trazo_pts]
     d.line(pts, fill=BLANCO, width=TRAZO, joint="curve")
@@ -52,10 +57,12 @@ def icono(fondo):
     d = ImageDraw.Draw(img)
     for t in CUBO:
         dibujar(d, t)
-    nudo = (91.5, 1)
+    # El moño sale del centro de la cara de arriba del cubo y tapa las aristas que quedan detrás.
+    nudo = (91.5, 48)
     for lado in (-1, 1):
+        tapar(d, lazo(nudo, lado))
         dibujar(d, lazo(nudo, lado), cerrar=True)
-    # Nudo: un círculo lleno apoyado en la esquina superior del cubo.
+    # Nudo: un círculo lleno en el centro de la cara de arriba.
     x, y = punto(nudo)
     r = TRAZO * 1.15
     d.ellipse((x - r, y - r, x + r, y + r), fill=BLANCO)

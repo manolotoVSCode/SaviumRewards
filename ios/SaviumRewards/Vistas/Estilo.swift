@@ -99,12 +99,3 @@ struct EstiloTarjeta: ButtonStyle {
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
     }
 }
-
-enum Formato {
-    static func saldo(_ valor: Int64) -> String { valor.formatted(.number) }
-
-    static func dia(_ texto: String?) -> String? {
-        guard let texto, let fecha = Dia.fecha(texto) else { return nil }
-        return fecha.formatted(date: .abbreviated, time: .omitted)
-    }
-}

@@ -15,7 +15,7 @@ struct BienvenidaView: View {
 
     private let paginas = [
         Pagina(id: 0, simbolo: "wallet.pass.fill", colores: [Color(hex: 0x34A815), Color(hex: 0x239005)],
-               titulo: "Todas tus tarjetas", texto: "Puntos, millas y monederos en un solo sitio, con su código listo para la caja."),
+               titulo: "Todas tus tarjetas", texto: "Tus tarjetas de fidelidad en un solo sitio, con su código listo para la caja. Deja las de plástico en casa."),
         Pagina(id: 1, simbolo: "barcode.viewfinder", colores: [Color(hex: 0x30C9C9), Color(hex: 0x0E7C86)],
                titulo: "Escanéalas", texto: "Apunta la cámara a la tarjeta y se guarda el código. También sin conexión."),
         Pagina(id: 2, simbolo: "person.2.fill", colores: [Color(hex: 0x7A6CFF), Color(hex: 0x3B2DBF)],

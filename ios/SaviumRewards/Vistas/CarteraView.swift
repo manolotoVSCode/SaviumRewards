@@ -81,7 +81,7 @@ struct CarteraView: View {
         ContentUnavailableView {
             Label("Tu cartera está vacía", systemImage: "wallet.pass")
         } description: {
-            Text("Añade tus tarjetas de puntos, millas y monederos para tenerlas siempre a mano.")
+            Text("Añade tus tarjetas de fidelidad para tenerlas siempre a mano, sin llevarlas encima.")
         }
         .padding(.top, 60)
     }

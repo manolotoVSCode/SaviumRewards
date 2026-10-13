@@ -1,7 +1,7 @@
 import SwiftUI
 import RewardsCore
 
-/// Alta y edición de una tarjeta: programa del catálogo u «Otro», código (escaneado o escrito), saldo y caducidad.
+/// Alta y edición de una tarjeta: programa del catálogo u «Otro» y su código (escaneado o escrito).
 struct EditorView: View {
     @Environment(Almacen.self) private var almacen
     @Environment(\.dismiss) private var cerrar
@@ -10,11 +10,6 @@ struct EditorView: View {
     let nueva: Bool
 
     @State private var valor: String
-    @State private var saldoTexto: String
-    @State private var conFechaSaldo: Bool
-    @State private var fechaSaldo: Date
-    @State private var conCaducidad: Bool
-    @State private var caducidad: Date
     @State private var escaneando = false
     @State private var confirmarBorrado = false
     @State private var otroPrograma: Bool
@@ -24,38 +19,20 @@ struct EditorView: View {
         original = tarjeta
         self.nueva = nueva
         _valor = State(initialValue: tarjeta.codigoValor ?? "")
-        _saldoTexto = State(initialValue: tarjeta.saldo.map(String.init) ?? "")
-        _conFechaSaldo = State(initialValue: tarjeta.saldoFecha != nil)
-        _fechaSaldo = State(initialValue: tarjeta.saldoFecha.flatMap { Dia.fecha($0) } ?? .now)
-        _conCaducidad = State(initialValue: tarjeta.caducidad != nil)
-        _caducidad = State(initialValue: tarjeta.caducidad.flatMap { Dia.fecha($0) } ?? .now)
         _otroPrograma = State(initialValue: !nueva && tarjeta.programaId == nil)
     }
 
     private var programa: Programa? { t.programaId.flatMap { almacen.programas[$0] } }
     private var validacion: Codigos.Resultado { Codigos.validar(valor, tipo: t.codigoTipo) }
-    private var saldo: Int64? { Int64(saldoTexto.filter(\.isNumber)) }
-    private var saldoValido: Bool { saldoTexto.filter(\.isNumber).isEmpty || (saldo.map { $0 <= Tarjeta.saldoMaximo } ?? false) }
     private var nombreValido: Bool { t.programaId != nil || !(t.nombre ?? "").trimmingCharacters(in: .whitespaces).isEmpty }
     private var textosValidos: Bool { t.textosConLimite.allSatisfy { ($0.valor?.trimmingCharacters(in: .whitespacesAndNewlines).unicodeScalars.count ?? 0) <= $0.maximo } }
-    private var puedeGuardar: Bool { validacion == .valido && saldoValido && nombreValido && textosValidos }
+    private var puedeGuardar: Bool { validacion == .valido && nombreValido && textosValidos }
 
     var body: some View {
         NavigationStack {
             Form {
                 seccionPrograma
                 seccionCodigo
-                Section("Saldo") {
-                    HStack {
-                        TextField("Saldo", text: $saldoTexto).keyboardType(.numberPad)
-                        Text(t.unidad ?? programa?.unidad ?? String(localized: "puntos")).foregroundStyle(.secondary)
-                    }
-                    if !saldoValido { Text("El saldo no es válido.").font(.footnote).foregroundStyle(.red) }
-                    Toggle("Saldo a una fecha", isOn: $conFechaSaldo.animation())
-                    if conFechaSaldo { DatePicker("Fecha del saldo", selection: $fechaSaldo, displayedComponents: .date) }
-                    Toggle("Caducidad", isOn: $conCaducidad.animation())
-                    if conCaducidad { DatePicker("Caducan el", selection: $caducidad, displayedComponents: .date) }
-                }
                 Section {
                     TextField("Titular", text: opcional(\.titular))
                     TextField("Notas", text: opcional(\.notas), axis: .vertical).lineLimit(2...6)
@@ -66,7 +43,7 @@ struct EditorView: View {
                     Text("Tu familia podrá verla y enseñar su código. Solo tú puedes cambiarla.")
                 }
                 if !textosValidos {
-                    Section { Text("Algún texto es demasiado largo (nombre 60, unidad 20, número de socio 64, titular 60, notas 1000).").foregroundStyle(.red) }
+                    Section { Text("Algún texto es demasiado largo (nombre 60, número de socio 64, titular 60, notas 1000).").foregroundStyle(.red) }
                 }
                 if !nueva {
                     Section {
@@ -130,7 +107,6 @@ struct EditorView: View {
             }
             if otroPrograma {
                 TextField("Nombre de la tarjeta", text: opcional(\.nombre))
-                TextField("Unidad (puntos, millas…)", text: opcional(\.unidad))
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(Paleta.propios, id: \.self) { hex in
@@ -192,9 +168,6 @@ struct EditorView: View {
     private func guardar() {
         var final = t
         final.codigoValor = t.codigoTipo == .ninguno ? nil : Codigos.normalizar(valor, tipo: t.codigoTipo)
-        final.saldo = saldo
-        final.saldoFecha = conFechaSaldo ? Dia.texto(fechaSaldo) : nil
-        final.caducidad = conCaducidad ? Dia.texto(caducidad) : nil
         for campo in [\Tarjeta.nombre, \.unidad, \.numeroSocio, \.titular, \.notas] {
             let limpio = final[keyPath: campo]?.trimmingCharacters(in: .whitespacesAndNewlines)
             final[keyPath: campo] = (limpio?.isEmpty ?? true) ? nil : limpio

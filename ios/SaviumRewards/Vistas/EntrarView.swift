@@ -79,7 +79,7 @@ struct EntrarView: View {
                 }
                 .padding(.horizontal, 24)
 
-                Text("Savium Rewards es solo por invitación: reúne las tarjetas de puntos y monederos de tu familia.")
+                Text("Savium Rewards es solo por invitación: reúne las tarjetas de fidelidad de tu familia.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

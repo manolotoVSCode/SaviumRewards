@@ -45,11 +45,6 @@ struct DetalleView: View {
                         }
                     }
                     if let titular = t.titular, !titular.isEmpty { fila("Titular", titular) }
-                    if let saldo = t.saldo {
-                        fila("Saldo", "\(Formato.saldo(saldo)) \(t.unidadEfectiva(programa))")
-                    }
-                    if let fecha = Formato.dia(t.saldoFecha) { fila("Saldo a fecha de", fecha) }
-                    if let caduca = Formato.dia(t.caducidad) { fila("Caducidad", caduca) }
                     if let notas = t.notas, !notas.isEmpty { fila("Notas", notas) }
                     if !almacen.esMia(t), let dueno = almacen.dueno(t) { fila("De", dueno) }
                 }

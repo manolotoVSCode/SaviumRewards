@@ -1,7 +1,7 @@
 import SwiftUI
 import RewardsCore
 
-/// Tarjeta estilo Wallet: color del programa, nombre, saldo y, si es de otro miembro, de quién es.
+/// Tarjeta estilo Wallet: color del programa, nombre, número de socio y, si es de otro miembro, de quién es.
 struct TarjetaVista: View {
     let tarjeta: Tarjeta
     let programa: Programa?
@@ -36,27 +36,14 @@ struct TarjetaVista: View {
             Text(tarjeta.titulo(programa))
                 .font(grande ? .title2.bold() : .title3.bold())
                 .lineLimit(1)
-            HStack(alignment: .lastTextBaseline) {
-                if let saldo = tarjeta.saldo {
-                    Text(Formato.saldo(saldo))
-                        .font(.system(size: grande ? 34 : 26, weight: .bold, design: .rounded))
-                        .monospacedDigit()
-                        .contentTransition(.numericText(value: Double(saldo)))
-                        .minimumScaleFactor(0.6)
-                        .lineLimit(1)
-                    Text(tarjeta.unidadEfectiva(programa)).font(.subheadline.weight(.semibold)).opacity(0.85)
-                } else if let socio = tarjeta.numeroSocio, !socio.isEmpty {
-                    Text(socio).font(.system(.headline, design: .monospaced)).opacity(0.9).lineLimit(1)
-                }
-                Spacer(minLength: 8)
-                if let caduca = Formato.dia(tarjeta.caducidad) {
-                    VStack(alignment: .trailing, spacing: 0) {
-                        Text("Caduca").font(.caption.weight(.semibold)).opacity(0.85)
-                        Text(caduca).font(.caption.weight(.bold))
-                    }
-                }
+            if let socio = tarjeta.numeroSocio, !socio.isEmpty {
+                Text(socio)
+                    .font(.system(grande ? .title3 : .headline, design: .monospaced).weight(.semibold))
+                    .opacity(0.9)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .padding(.top, 2)
             }
-            .padding(.top, 2)
         }
         .foregroundStyle(.white)
         .padding(grande ? 22 : 18)
