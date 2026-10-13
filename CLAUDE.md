@@ -3,8 +3,8 @@
 - Ver README.md para estructura, comandos y modelo de servidor; el diseño está en docs/superpowers/specs.
 - Identificadores, textos y comentarios en español, breves.
 - El `.xcodeproj` se genera con `xcodegen generate` (en `ios/`); no editarlo a mano.
-- La lógica va en `ios/RewardsCore` (Swift) y en `web/src/lib` (TypeScript) con la misma especificación; los casos
-  comunes viven en `shared/fixtures/` y los usan las pruebas de ambos lados.
+- La lógica va en `ios/RewardsCore` (Swift) y, para la web, en `src/lib/rewards` del repo de Savium Finanzas
+  (TypeScript), con la misma especificación; los casos viven en `shared/fixtures/` (con copia en Finanzas).
 - Servidor: proyecto de Supabase de Savium Finanzas. **No tocar nada que no empiece por `rewards_`.** Las
   migraciones no se aplican a producción sin aprobación explícita del usuario; para probarlas, ejecutarlas junto
   con `supabase/tests/rewards_rls.sql` dentro de `begin; … rollback;`.

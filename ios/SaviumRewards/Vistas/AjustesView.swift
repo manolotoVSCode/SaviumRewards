@@ -35,7 +35,7 @@ struct AjustesView: View {
                     Text(almacen.nombreFamilia ?? String(localized: "Familia"))
                 } footer: {
                     Text(almacen.esAdmin
-                         ? "Invita a tu familia desde el panel web de Savium Rewards."
+                         ? "Invita a tu familia desde Savium Finanzas (Apps → Savium Rewards)."
                          : "Quien administra la familia puede invitar a más personas.")
                 }
 

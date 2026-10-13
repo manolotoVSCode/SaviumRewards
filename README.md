@@ -5,7 +5,9 @@ código de cada tarjeta listo para enseñarlo en caja (también sin conexión). 
 con la familia. Solo por invitación.
 
 - **App de iPhone** (`ios/`): SwiftUI, iOS 27, Liquid Glass. Escanea códigos con la cámara (VisionKit).
-- **Web** (`web/`): panel de usuario y de administración (miembros e invitaciones, uso, catálogo). Vite + React.
+- **Web**: vive dentro de Savium Finanzas (menú Apps → Savium Rewards; `src/pages/SaviumRewards.tsx` del repo
+  `saviumfinanzas`): tarjetas, familia, miembros e invitaciones, uso y catálogo. Política de privacidad en
+  https://savium.manoloto.com/privacidad-rewards.html.
 - **Servidor** (`supabase/`): proyecto de Savium Finanzas (`alexhdutnvlxwhziudnr`), tablas `rewards_*`.
 
 Diseño: `docs/superpowers/specs/2026-10-13-savium-rewards-v1-design.md`.
@@ -17,8 +19,7 @@ Plan: `docs/superpowers/plans/2026-10-13-savium-rewards-v1.md`.
 |---|---|
 | `ios/RewardsCore/` | Paquete Swift con la lógica (validar y codificar códigos, totales por unidad, fusión de cambios, JSON del servidor) y sus pruebas. |
 | `ios/SaviumRewards/` | App: `Datos/` (Supabase), `Modelo/` (sesión y almacén local con sincronización), `Vistas/`. |
-| `web/src/lib/` | Lógica de la web (misma especificación que `RewardsCore`) y consultas. |
-| `shared/fixtures/` | Casos de prueba comunes a Swift y TypeScript (incluye barras de referencia generadas con JsBarcode). |
+| `shared/fixtures/` | Casos de prueba de códigos (incluye barras de referencia generadas con JsBarcode). Finanzas tiene una copia en `shared/fixtures/rewards-codigos.json` para su `src/lib/rewards`: si cambian, actualizar las dos. |
 | `supabase/migrations/` | Esquema `rewards_*`, reglas de acceso y funciones. |
 | `supabase/tests/` | Pruebas de reglas de acceso (se ejecutan en una transacción que se deshace). |
 | `supabase/functions/` | `rewards-invitar` (invitaciones) y `rewards-cuenta` (eliminar cuenta, quitar miembro, roles, familias). |
@@ -31,9 +32,6 @@ swift test --package-path ios/RewardsCore            # pruebas de la lógica (fu
 cd ios && xcodegen generate                            # el .xcodeproj no se versiona
 xcodebuild -project ios/SaviumRewards.xcodeproj -scheme SaviumRewards -destination 'generic/platform=iOS Simulator' build
 xcrun simctl launch booted com.savium.rewards -demo YES   # (solo Debug) cartera de demostración sin servidor
-cd web && npm install && npm run dev                   # web en http://localhost:8081
-cd web && npm test && npm run lint && npm run build
-cd web && npm run fixtures:barras                      # regenera las barras de referencia
 ```
 
 ## Servidor
@@ -48,7 +46,11 @@ cd web && npm run fixtures:barras                      # regenera las barras de 
 - Aislado para poder mudarlo: nada fuera de `rewards_*` lo referencia. Al lanzar, se mueve a un proyecto propio.
 - Auditoría de seguridad de Finanzas previa: `docs/auditorias/` (solo en local; no se publica).
 
-## Puesta en marcha (pasos manuales)
+## Puesta en marcha
+
+Hecho el 2026-10-13: migración, registro público desactivado, plantilla de correo con `{{ .Token }}`, SMTP de
+iCloud, familia inicial con el titular como administrador, catálogo, Edge Functions y web dentro de Finanzas
+(Web 10.1). Lista original:
 
 1. Aplicar `supabase/migrations/20261013120000_rewards.sql` en el SQL Editor.
 2. Authentication → Sign In / Providers: **desactivar «Allow new users to sign up»**.
@@ -59,7 +61,6 @@ cd web && npm run fixtures:barras                      # regenera las barras de 
 5. Ejecutar `supabase/semillas/rewards_inicial.sql` (crea tu familia y te hace administrador).
 6. Revisar y ejecutar `supabase/semillas/rewards_catalogo.sql`.
 7. Desplegar las funciones: `supabase functions deploy rewards-invitar rewards-cuenta`.
-8. Crear el repositorio en GitHub y activar Pages (Settings → Pages → GitHub Actions). La política de
-   privacidad queda en `…/SaviumRewards/#/privacidad` (`Config.privacidad` en la app).
+8. Web y política de privacidad: dentro de Savium Finanzas (Web 10.1).
 9. App Store Connect: app `com.savium.rewards`, icono, capturas (modo `-demo`), cuenta de revisión en una familia
    «Revisión App Store» con tarjetas de ejemplo, y nota de revisión explicando que es solo por invitación.

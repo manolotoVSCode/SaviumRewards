@@ -229,6 +229,9 @@ Español e inglés; modo claro y oscuro; textos y comentarios del código en esp
 
 ## Web
 
+> Cambio 2026-10-13: la web vive dentro de Savium Finanzas (menú Apps → Savium Rewards, con la sesión de Finanzas),
+> porque solo la usa el titular; la familia usa la app. Privacidad en savium.manoloto.com/privacidad-rewards.html.
+
 Vite + React + shadcn, `HashRouter`, Supabase JS con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`.
 
 - **Entrar:** correo + código.
