@@ -68,15 +68,29 @@ final class Sesion {
         }
     }
 
+    /// Cierra la sesión en este iPhone. No espera al evento de Supabase: el estado pasa a «fuera» aunque el
+    /// aviso no llegue (sin conexión, o en el modo de demostración, que no escucha a Supabase).
     func cerrar() async {
         cierreVoluntario = true
         try? await supabase.auth.signOut(scope: .local)
+        estado = .fuera
+        email = nil
     }
 
     /// Se llama tras eliminar la cuenta en el servidor.
-    func olvidar() async {
-        cierreVoluntario = true
-        try? await supabase.auth.signOut(scope: .local)
+    func olvidar() async { await cerrar() }
+
+    /// Entrada con contraseña: para quien ya la tiene (el titular, por Savium Finanzas) y para la cuenta de
+    /// revisión de Apple, que no puede recibir códigos por correo.
+    func entrar(email: String, clave: String) async -> Bool {
+        mensaje = nil
+        do {
+            try await supabase.auth.signIn(email: Self.limpiar(email), password: clave)
+            return true
+        } catch {
+            mensaje = String(localized: "No se pudo entrar. Revisa el correo y la contraseña.")
+            return false
+        }
     }
 
     static func limpiar(_ email: String) -> String {
